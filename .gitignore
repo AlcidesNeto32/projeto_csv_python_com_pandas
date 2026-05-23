@@ -1,0 +1,16 @@
+# Ambiente virtual
+.venv/
+venv/
+
+# Cache Python
+__pycache__/
+*.pyc
+
+# vscode 
+.vscode/
+
+# Arquivos de sistema
+.DS_Store
+
+#csv teste
+funcionarios.csv
