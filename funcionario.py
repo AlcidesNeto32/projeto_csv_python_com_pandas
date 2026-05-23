@@ -1,8 +1,86 @@
 from datetime import datetime as dt
 import csv,re,time,pandas as pd
-from entity import funcionario
 
+class Funcionario:
+    
+    def __init__(self,nome,sexo,cpf,email,telefone,data_nascimento,departamento,cargo):
+        self.__nome = nome
+        self.__sexo = sexo
+        self.__cpf = cpf
+        self.__email = email
+        self.__telefone = telefone
+        self.__data_nascimento = data_nascimento
+        self.__departamento = departamento
+        self.__cargo = cargo
 
+    @property
+    def nome(self):
+        return self.__nome
+    
+    @nome.setter
+    def nome(self,nome):
+        self.__nome = nome
+    
+    @property
+    def sexo(self):
+        return self.__sexo
+    
+    @sexo.setter
+    def sexo(self,sexo):
+        self.__sexo = sexo
+        
+    @property
+    def cpf(self):
+        return self.__cpf
+    
+    @property
+    def email(self):
+        return self.__email
+    
+    @email.setter
+    def email(self,email): 
+        self.__email = email
+    
+    @property
+    def telefone(self):
+        return self.__telefone
+
+    @telefone.setter
+    def telefone(self,telefone):
+        self.__telefone = telefone
+    
+    @property
+    def data_nascimento(self):
+        return self.__data_nascimento
+    
+    @property
+    def departamento(self):
+        return self.__departamento
+    
+    @departamento.setter
+    def departamento(self,departamento):
+        self.__departamento = departamento
+        
+    @property
+    def cargo(self):
+        return self.__cargo
+
+    @cargo.setter
+    def cargo(self,cargo):
+        self.__cargo = cargo
+    
+    
+    def __str__(self):
+        return f"""
+NOME: {self.__nome}
+SEXO: {self.__sexo}
+CPF: {self.__cpf}
+EMAIL: {self.__email}
+TELEFONE: {self.__telefone}
+DATA NASCIMENTO: {self.__data_nascimento}
+DEPARTAMENTO: {self.__departamento}
+CARGO: {self.__cargo}
+"""
 
 class FuncionarioService:
     
@@ -34,7 +112,7 @@ class FuncionarioService:
                      "cargo":Funcionario.cargo,
                      }
 
-         with open("/home/alcides-neto/Documents/EstudandoCobraLaele/funcionarios/funcionarios.csv","a",newline="") as func_file:
+         with open("/home/alcides-neto/Documents/EstudandoCobraLaele/read_files/funcionarios.csv","a",newline="") as func_file:
              campos = ["nome","sexo","cpf","email","telefone","data_nascimento","departamento","cargo"]
              preencher_file = csv.DictWriter(func_file,fieldnames=campos)
              preencher_file.writerow(
@@ -53,7 +131,7 @@ class FuncionarioService:
         if not validate_cpf(cpf):
             return("CPF INVÁLIDO!")
                     
-        with open("/home/alcides-neto/Documents/EstudandoCobraLaele/funcionarios/funcionarios.csv","r") as func_file:
+        with open("/home/alcides-neto/Documents/EstudandoCobraLaele/read_files/funcionarios.csv","r") as func_file:
             funcionarios_dict = csv.DictReader(func_file)
             for funcionario in funcionarios_dict:
                 if funcionario['cpf'] == cpf:
@@ -68,7 +146,7 @@ class FuncionarioService:
     
     def atualizar_dados_funcionario(self,nome,sexo,cpf,email,telefone,departamento,cargo):
         
-       with open("/home/alcides-neto/Documents/EstudandoCobraLaele/funcionarios/funcionarios.csv","r") as func_file:
+       with open("/home/alcides-neto/Documents/EstudandoCobraLaele/read_files/funcionarios.csv","r") as func_file:
             funcionarios = list(csv.DictReader(func_file))
             
        for funcionario in funcionarios:
@@ -78,7 +156,7 @@ class FuncionarioService:
                    'email':email,'telefone':telefone,
                    'departamento':departamento,'cargo':cargo})
                break
-       with open("/home/alcides-neto/Documents/EstudandoCobraLaele/funcionarios/funcionarios.csv","w") as func_file:
+       with open("/home/alcides-neto/Documents/EstudandoCobraLaele/read_files/funcionarios.csv","w") as func_file:
             cabecalho = ['nome','sexo','cpf','email','telefone','data_nascimento','departamento','cargo']
             writer = csv.DictWriter(func_file,fieldnames=cabecalho)
             writer.writeheader()
@@ -86,7 +164,7 @@ class FuncionarioService:
    
     @staticmethod
     def listar_funcionarios():
-        with open("/home/alcides-neto/Documents/EstudandoCobraLaele/funcionarios/funcionarios.csv","r") as func_csv:
+        with open("/home/alcides-neto/Documents/EstudandoCobraLaele/read_files/funcionarios.csv","r") as func_csv:
             dict_funcionarios = list(csv.DictReader(func_csv))
         
         if len(dict_funcionarios) == 0:
@@ -121,7 +199,7 @@ SELECIONE A OPÇÃO:
 """
 
 def relatorio_geral():
-        funcionarios = pd.read_csv("/home/alcides-neto/Documents/EstudandoCobraLaele/funcionarios/funcionarios.csv")
+        funcionarios = pd.read_csv("/home/alcides-neto/Documents/EstudandoCobraLaele/read_files/funcionarios.csv")
         print(funcionarios.departamento)
                     
 #validação simples
@@ -160,8 +238,7 @@ def validate_cpf(cpf: str) -> bool:
 
 while True:
     opcao = int(input(menu))
-    funcionario_service = FuncionarioService()
-    
+    func_service = FuncionarioService()
     try:
         match opcao:
             case 1:
@@ -178,13 +255,14 @@ while True:
                     for i in range(3):
                         print(".",end="",flush=True)
                         time.sleep(0.5)
-                    func = funcionario.Funcionario(nome,sexo,cpf,email,telefone,data_nascimento,departamento,cargo)
-                    print(funcionario_service.cadastrar_funcionario(func))
+                    print()
+                    funcionario = Funcionario(nome,sexo,cpf,email,telefone,data_nascimento,departamento,cargo)
+                    print(FuncionarioService.cadastrar_funcionario(funcionario))
                 except ValueError:
                     print("Data inválida!")
             case 2:
                 cpf = input("Digite o CPF do funcionário: ")
-                funcionario = funcionario_service.busca_funcionario(cpf)
+                funcionario = func_service.busca_funcionario(cpf)
                 print(funcionario)
             case 3:
                 nome = input("NOME: ")
@@ -199,9 +277,9 @@ while True:
                     print(".",end="",flush=True)
                     time.sleep(0.5)
                 print()
-                print(funcionario_service.atualizar_dados_funcionario(nome,sexo,cpf,email,telefone,departamento,cargo))
+                print(func_service.atualizar_dados_funcionario(nome,sexo,cpf,email,telefone,departamento,cargo))
             case 4:
-                funcionario_service.listar_funcionarios()
+                func_service.listar_funcionarios()
             case 5:
                 relatorio_geral()
             case 6:
