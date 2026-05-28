@@ -65,7 +65,6 @@ while True:
             case 5:
                 funcionario_service.relatorio_geral()
             case 6:
-
                 print("Saindo",end="",flush=True)
                 for i in range(3):
                     print(".",end="",flush=True)

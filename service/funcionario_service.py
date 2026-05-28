@@ -1,11 +1,11 @@
 from datetime import datetime as dt
-import csv,re, pandas as pd
+import csv, re, pandas as pd
 
 path = "/home/alcides-neto/Documents/EstudandoCobraLaele/funcionarios/funcionarios.csv"
 class FuncionarioService:
 
     def cadastrar_funcionario(self,Funcionario):
-         if len(Funcionario.nome) < 10:
+         if len(Funcionario.nome.strip()) < 10:
              return "NOME INVÁLIDO!"
          if not self.validate_cpf(cpf=Funcionario.cpf):
              return 'CPF INVÁLIDO!'
@@ -26,15 +26,15 @@ class FuncionarioService:
          with open(path,"a",newline="") as func_file:
              campos = ["nome","sexo","cpf","email","telefone","data_nascimento","departamento","cargo"]
              preencher_file = csv.DictWriter(func_file,fieldnames=campos)
-             preencher_file.writer(
-                     {"nome":Funcionario.nome,
+             preencher_file.writerow(
+                    {"nome":Funcionario.nome,
                      "sexo":Funcionario.sexo,
                      "cpf":Funcionario.cpf,
                      "email":Funcionario.email,
                      "telefone":Funcionario.telefone,
                      "data_nascimento":Funcionario.data_nascimento,
                      "departamento":Funcionario.departamento,
-                     "cargo":Funcionario.cargo,
+                     "cargo":Funcionario.cargo
                      })
          return "Funcionário(a) cadastrado com sucesso!"
     
