@@ -43,16 +43,24 @@ class FuncionarioService:
         funcionarios["data_nascimento"] = pd.to_datetime(funcionarios["data_nascimento"])
         funcionarios["idade"] = dt.now().year - funcionarios["data_nascimento"].dt.year
         print(f"""
-TOTAL DE DEPARTAMENTOS: {funcionarios["departamento"].value_counts().count()}
-TOTAL DE FUNCIONARIOS: {funcionarios["cpf"].count()} 
+TOTAL DE DEPARTAMENTOS: 
+{funcionarios["departamento"].value_counts().count()}
+TOTAL DE FUNCIONARIOS: 
+{funcionarios["cpf"].count()} 
 TOTAL DE FUNCIONARIOS POR DEPARTAMENTO: 
 {funcionarios["departamento"].value_counts()}
-MÉDIA DE IDADE DOS FUNCIONARIOS: {round(funcionarios['idade'].mean(),0)}
+MÉDIA DE IDADE DOS FUNCIONARIOS: 
+{round(funcionarios['idade'].mean(),0)}
+DESVIO PADRÃO DA IDADE: 
+{round(funcionarios['idade'].std(),0)}
 QUANTIDADE DE FUNCIONÁRIOS POR SEXO: 
 {funcionarios["sexo"].value_counts()}
+QUANTIDADE PROFISSIONAIS POR SEXO NOS DEPARTAMENTOS: 
+{pd.crosstab(funcionarios["departamento"], funcionarios["sexo"])}
 """)        
+        
     def busca_funcionario(self,cpf):
-        if not self.validate_cpf(cpf):
+        if self.validate_cpf(cpf):
             return("CPF INVÁLIDO!")
                     
         with open(path,"r") as func_file:
