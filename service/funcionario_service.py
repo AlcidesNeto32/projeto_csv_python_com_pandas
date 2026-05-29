@@ -61,7 +61,8 @@ QUANTIDADE PROFISSIONAIS POR SEXO NOS DEPARTAMENTOS:
 """)        
         
     def busca_funcionario(self,cpf):
-        if self.validate_cpf(cpf):
+        
+        if not self.validate_cpf(cpf):
             return("CPF INVÁLIDO!")
                     
         with open(path,"r") as func_file:
