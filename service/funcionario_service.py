@@ -5,6 +5,7 @@ path = "/home/alcides-neto/Documents/EstudandoCobraLaele/funcionarios/funcionari
 class FuncionarioService:
 
     def cadastrar_funcionario(self,Funcionario):
+        
          if len(Funcionario.nome.strip()) < 10:
              return "NOME INVÁLIDO!"
          if not self.validate_cpf(cpf=Funcionario.cpf):
@@ -80,23 +81,27 @@ CARGO: {funcionario['cargo']}
         return "Funcionário(a) não encontrado"
     
     def atualizar_dados_funcionario(self,nome,sexo,cpf,email,telefone,departamento,cargo):
+    
+        if self.busca_funcionario(cpf) == "Funcionário(a) não encontrado":
+            return "Funcionário(a) não está cadastrado!"
         
-       with open(path,"r") as func_file:
-            funcionarios = list(csv.DictReader(func_file))
-            
-       for funcionario in funcionarios:
-           if funcionario['cpf'] == cpf:
-               funcionario.update({
-                   'nome':nome,'sexo':sexo,
-                   'email':email,'telefone':telefone,
-                   'departamento':departamento,'cargo':cargo})
-               break
-       with open(path,"w") as func_file:
-            cabecalho = ['nome','sexo','cpf','email','telefone','data_nascimento','departamento','cargo']
-            writer = csv.DictWriter(func_file,fieldnames=cabecalho)
-            writer.writeheader()
-            writer.writerows(funcionarios)
-   
+        with open(path,"r") as func_file:
+             funcionarios = list(csv.DictReader(func_file))
+             
+        for funcionario in funcionarios:
+            if funcionario['cpf'] == cpf:
+                funcionario.update({
+                    'nome':nome,'sexo':sexo,
+                    'email':email,'telefone':telefone,
+                    'departamento':departamento,'cargo':cargo})
+                break
+        with open(path,"w") as func_file:
+             cabecalho = ['nome','sexo','cpf','email','telefone','data_nascimento','departamento','cargo']
+             writer = csv.DictWriter(func_file,fieldnames=cabecalho)
+             writer.writeheader()
+             writer.writerows(funcionarios)
+        return "Dados do funcionários atualizados com sucesso!"
+    
     @staticmethod
     def listar_funcionarios():
         with open(path,"r") as func_csv:
